@@ -180,7 +180,7 @@ def test_live_reminder_includes_on_time_trigger():
             "title": "on-time reminder",
             "schedule_type": "point",
             "due_at": due_at.isoformat(),
-            "reminder_offsets": "5m",
+            "reminder_offsets": "0m,5m",
             "reminder_phase": "start",
         },
     )

@@ -4,6 +4,13 @@ A lightweight Flask-based schedule management application with time point/range 
 
 **Built with AI-assisted development ("Vibe Coding")** — iterative feature development with real-time testing and documentation.
 
+> ⚠️ **AI Coding Guidelines / AI编程强制规范**: 
+> Any AI or LLM assistant working on this repository **MUST** read and strictly follow the comprehensive guidelines defined in [`CLAUDE.md`](CLAUDE.md) before executing tasks. Key principles include:
+> - Think Before Coding (State assumptions explicitly)
+> - Simplicity First (Minimum code, no speculative features)
+> - Surgical Changes (Touch only what you must)
+> - Goal-Driven Execution (Loop until verified)
+
 ## ✨ Features
 
 - **Dual Time Support**: Point-in-time or time-range scheduling

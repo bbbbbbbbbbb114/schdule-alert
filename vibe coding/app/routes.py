@@ -48,8 +48,8 @@ def parse_reminder_offsets(raw: str) -> tuple[str, list[timedelta]]:
                 minutes = int(token[:-1])
             except ValueError as exc:
                 raise ValueError("invalid minute reminder offset") from exc
-            if minutes <= 0:
-                raise ValueError("reminder offset minutes must be positive")
+            if minutes < 0:
+                raise ValueError("reminder offset minutes must be non-negative")
             valid_tokens.append(f"{minutes}m")
             deltas.append(timedelta(minutes=minutes))
             continue
@@ -68,12 +68,12 @@ def parse_reminder_offsets(raw: str) -> tuple[str, list[timedelta]]:
         raise ValueError("reminder_offsets supports only Xm or Xd, e.g. 5m,10m,1d")
 
     unique_pairs = sorted(zip(valid_tokens, deltas), key=lambda pair: pair[1])
-    merged_tokens = ",".join(dict((token, delta) for token, delta in unique_pairs).keys())
-    merged_deltas = list(dict((token, delta) for token, delta in unique_pairs).values())
-
-    # Always include on-time reminder so users still receive alerts at phase time.
-    if all(delta.total_seconds() != 0 for delta in merged_deltas):
-        merged_deltas = [timedelta()] + merged_deltas
+    
+    # 构建去重后的字符串和对应的 timedelta 列表
+    # (先构建字典利用 keys 去重，虽然由于 sorted + set 可能已经不需要，但保留兼容)
+    dedup_dict = dict((token, delta) for token, delta in unique_pairs)
+    merged_tokens = ",".join(dedup_dict.keys())
+    merged_deltas = list(dedup_dict.values())
 
     return merged_tokens, merged_deltas
 

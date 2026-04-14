@@ -1,4 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+# write_styles.py
+import sys
+
+css_content = """@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
     /* Design.md: Warm Neutral Scale */
@@ -444,31 +447,11 @@ textarea { min-height: 80px; resize: vertical; }
     .sidebar { display: none; }
     .content-scroll { padding: 16px; }
 }
+"""
 
-
-/* ====================================================
-   FAB BUTTON (Floating Action Button)
-==================================================== */
-.btn-fab {
-    position: fixed;
-    bottom: 32px;
-    right: 32px;
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background: var(--primary);
-    color: white;
-    font-size: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    cursor: pointer;
-    z-index: 1000;
-    box-shadow: 0 0 0 0 rgba(221, 91, 0, 0.4), var(--shadow-deep);
-    transition: all 0.3s var(--ease-spring);
-}
-.btn-fab:hover {
-    transform: translateY(-4px) scale(1.05);
-    box-shadow: 0 0 0 6px rgba(221, 91, 0, 0), var(--shadow-deep);
-}
+try:
+    with open('app/static/css/styles.css', 'w', encoding='utf-8') as f:
+        f.write(css_content)
+    print("SUCCESS")
+except Exception as e:
+    print(f"FAILED: {e}")
