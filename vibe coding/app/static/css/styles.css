@@ -1,0 +1,378 @@
+:root {
+    --bg: #ffffff;
+    --bg-alt: #f6f5f4;
+    --text: rgba(0, 0, 0, 0.95);
+    --muted: #615d59;
+    --line: rgba(0, 0, 0, 0.1);
+    --blue: #0075de;
+    --blue-dark: #005bab;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Inter", "Segoe UI", sans-serif;
+    background: linear-gradient(180deg, var(--bg) 0%, var(--bg-alt) 100%);
+    color: var(--text);
+}
+
+.container {
+    width: min(980px, 92vw);
+    margin: 0 auto;
+}
+
+.topbar {
+    border-bottom: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(6px);
+}
+
+.brand {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    padding: 16px 0;
+}
+
+.hero {
+    margin: 28px 0;
+}
+
+.hero-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.hero h1 {
+    margin: 0 0 8px;
+    font-size: 44px;
+    line-height: 1.05;
+    letter-spacing: -1.2px;
+}
+
+.card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 16px;
+    box-shadow: rgba(0, 0, 0, 0.04) 0 4px 18px;
+}
+
+.login-card {
+    margin-top: 40px;
+}
+
+h2 {
+    margin-top: 0;
+}
+
+.form-grid {
+    display: grid;
+    gap: 10px;
+}
+
+input,
+select,
+textarea {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 10px;
+    font-size: 14px;
+}
+
+.time-group {
+    display: grid;
+    gap: 10px;
+}
+
+.inline-checks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+.inline-checks label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.btn {
+    border: 1px solid transparent;
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: var(--blue);
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: var(--blue-dark);
+}
+
+.btn-ghost {
+    background: transparent;
+    color: var(--text);
+    border-color: var(--line);
+}
+
+.btn-mini {
+    padding: 6px 10px;
+    font-size: 12px;
+    background: #f2f9ff;
+    color: #097fe8;
+    border-color: rgba(9, 127, 232, 0.2);
+    border-radius: 9999px;
+}
+
+.btn-danger {
+    background: #fff5f3;
+    color: #d14f1a;
+    border-color: rgba(209, 79, 26, 0.18);
+}
+
+.btn-alert {
+    background: #d62828;
+    color: #fff;
+    width: 100%;
+    font-weight: 700;
+    font-size: 16px;
+    padding: 12px 14px;
+}
+
+.btn-alert:hover {
+    background: #b71f1f;
+}
+
+.list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.list li {
+    padding: 10px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    background: #fff;
+}
+
+.item {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.item.done strong {
+    text-decoration: line-through;
+    color: var(--muted);
+}
+
+.item-main {
+    min-width: 0;
+}
+
+.item-actions {
+    display: flex;
+    gap: 8px;
+    align-items: start;
+}
+
+.check-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.meta {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+.tag {
+    display: inline-block;
+    border-radius: 9999px;
+    font-size: 12px;
+    padding: 3px 8px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: #f6f5f4;
+    color: #615d59;
+    margin-right: 6px;
+}
+
+.calendar-wrap {
+    margin-top: 10px;
+}
+
+.calendar-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+
+.legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 9999px;
+    display: inline-block;
+}
+
+.legend-dot.c1 {
+    background: #0075de;
+}
+
+.legend-dot.c2 {
+    background: #2a9d99;
+}
+
+.legend-dot.c3 {
+    background: #dd5b00;
+}
+
+.legend-dot.c4 {
+    background: #391c57;
+}
+
+.legend-dot.done {
+    background: #a39e98;
+}
+
+.fc {
+    --fc-border-color: rgba(0, 0, 0, 0.1);
+    --fc-page-bg-color: #fff;
+    --fc-neutral-bg-color: #f6f5f4;
+    --fc-today-bg-color: #f2f9ff;
+    --fc-event-text-color: #fff;
+}
+
+.fc .fc-toolbar-title {
+    font-size: 18px;
+    letter-spacing: -0.3px;
+}
+
+.fc .fc-button {
+    background: #0075de;
+    border-color: #0075de;
+}
+
+.fc .fc-button:hover {
+    background: #005bab;
+    border-color: #005bab;
+}
+
+.fc .point-event {
+    border-style: dashed;
+    opacity: 0.9;
+}
+
+.fc .range-event {
+    border-style: solid;
+}
+
+.fc .fc-timegrid-now-indicator-line {
+    border-color: #d62828;
+    border-top-width: 2px;
+}
+
+.fc .fc-timegrid-now-indicator-arrow {
+    border-top-color: #d62828;
+    border-bottom-color: #d62828;
+}
+
+.muted {
+    color: var(--muted);
+}
+
+.toast {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    max-width: 320px;
+    background: #213183;
+    color: #fff;
+    border-radius: 10px;
+    padding: 12px;
+    box-shadow: rgba(0, 0, 0, 0.15) 0 8px 26px;
+}
+
+.reminder-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(24, 21, 20, 0.76);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+
+.reminder-modal {
+    width: min(520px, 100%);
+    background: #fff;
+    border: 2px solid rgba(214, 40, 40, 0.36);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: rgba(0, 0, 0, 0.36) 0 22px 64px;
+}
+
+.badge-danger {
+    display: inline-block;
+    border-radius: 9999px;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #9e1717;
+    background: #ffe4e4;
+    border: 1px solid rgba(158, 23, 23, 0.22);
+    margin-bottom: 8px;
+}
+
+.reminder-message {
+    font-size: 18px;
+    line-height: 1.45;
+    margin-bottom: 14px;
+    color: #3a2d2b;
+}
+
+.hidden {
+    display: none;
+}
+
+@media (max-width: 640px) {
+    .hero h1 {
+        font-size: 26px;
+    }
+
+    .item {
+        flex-direction: column;
+    }
+
+    .item-actions {
+        justify-content: flex-end;
+    }
+
+    .fc .fc-toolbar {
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+    }
+}
