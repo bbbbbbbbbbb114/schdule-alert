@@ -13,6 +13,7 @@
 </head>
 
 <body>
+    {% block layout %}
     <div class="app-layout">
         <aside class="sidebar">
             <div class="brand">Vibe Schedule</div>
@@ -20,13 +21,14 @@
                 <a href="#schedule-form" class="nav-item active">新增日程</a>
                 <a href="#schedule-list" class="nav-item">我的日程</a>
                 <a href="#calendar" class="nav-item">可视化日历</a>
-                <a href="#overdue-list" class="nav-item">过期预警</a>
+                <a href="#upcoming-list" class="nav-item">近期日程</a>
             </nav>
         </aside>
         <main class="main-wrapper">
             {% block content %}{% endblock %}
         </main>
     </div>
+    {% endblock %}
 
     {% block scripts %}{% endblock %}
 </body>

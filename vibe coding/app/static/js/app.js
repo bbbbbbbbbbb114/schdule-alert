@@ -1,5 +1,5 @@
 const scheduleList = document.getElementById('schedule-list');
-const overdueList = document.getElementById('overdue-list');
+const upcomingList = document.getElementById('upcoming-list');
 const toast = document.getElementById('toast');
 const logoutBtn = document.getElementById('logout-btn');
 const reminderOverlay = document.getElementById('reminder-overlay');
@@ -361,14 +361,28 @@ function renderCalendar(items) {
                 right: 'timeGridWeek,timeGridDay,dayGridMonth'
             },
             eventClick(info) {
+                const title = info.event.title;
                 const desc = info.event.extendedProps.description;
                 const scheduleType = info.event.extendedProps.scheduleType;
                 const location = info.event.extendedProps.location;
+
                 const timeText = scheduleType === 'range'
                     ? `${info.event.start?.toLocaleString()} - ${info.event.end?.toLocaleString()}`
                     : `${info.event.start?.toLocaleString()}（时间点）`;
-                const locationText = location ? `\n地点：${location}` : '';
-                alert(`${info.event.title}\n${timeText}${locationText}\n${desc}`);
+
+                const locationHtml = location ? `<br><strong>地点：</strong>${location}` : '';
+                const descHtml = desc ? `<br><strong>描述：</strong>${desc}` : '';
+
+                const overlay = document.getElementById('event-detail-overlay');
+                document.getElementById('event-detail-title').textContent = title;
+                document.getElementById('event-detail-time').textContent = timeText;
+                document.getElementById('event-detail-desc').innerHTML = (locationHtml + descHtml) || '无';
+
+                overlay.classList.remove('hidden');
+
+                document.getElementById('event-detail-close-btn').onclick = () => {
+                    overlay.classList.add('hidden');
+                };
             }
         });
         calendar.render();
@@ -402,13 +416,79 @@ async function refreshSchedules() {
     renderSchedules(items);
     renderCalendar(items);
     updateCountdowns();
+    renderUpcoming(items);
 }
 
-async function refreshOverdue() {
-    const res = await fetch('/api/reminders/overdue');
-    if (!res.ok) return;
-    const items = await res.json();
-    renderList(overdueList, items);
+function renderUpcoming(items) {
+    const upcomingList = document.getElementById('upcoming-list');
+    if (!upcomingList) return;
+
+    upcomingList.innerHTML = '';
+    const now = new Date();
+
+    // Calculate occurrences
+    let upcomingOccurrences = [];
+
+    items.forEach(item => {
+        if (item.is_done) return;
+        const occ = getNextOccurrence(item, now);
+        if (occ.hasNext) {
+            upcomingOccurrences.push({
+                item,
+                start: occ.start,
+                end: occ.end,
+                diff: occ.start - now
+            });
+        }
+    });
+
+    // Sort by nearest start time
+    upcomingOccurrences.sort((a, b) => a.diff - b.diff);
+
+    // Render top 10
+    const topItems = upcomingOccurrences.slice(0, 10);
+
+    if (topItems.length === 0) {
+        upcomingList.innerHTML = '<li class="item" style="color: var(--text-muted); border: none; background: transparent; padding: 0;">暂无近期日程</li>';
+        return;
+    }
+
+    topItems.forEach(occ => {
+        const li = document.createElement('li');
+        li.className = 'item';
+
+        let urgencyClass = 'urgency-low';
+        let urgencyText = '即将到来';
+
+        // Negative diff means it's currently active (start <= now <= end)
+        if (occ.diff <= 0) {
+            urgencyClass = 'urgency-high';
+            urgencyText = '正在进行';
+        } else if (occ.diff <= 1 * 60 * 60 * 1000) { // 1 hour
+            urgencyClass = 'urgency-high';
+            urgencyText = '1小时内';
+        } else if (occ.diff <= 24 * 60 * 60 * 1000) { // 24 hours
+            urgencyClass = 'urgency-medium';
+            urgencyText = '24小时内';
+        }
+
+        const dateStr = occ.start.toLocaleString([], {
+            month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'
+        });
+
+        li.innerHTML = `
+            <div style="flex: 1; display:flex; flex-direction:column; gap:4px;">
+                <div style="display:flex; justify-content:space-between;">
+                    <strong style="color: var(--text-primary);">${occ.item.title}</strong>
+                    <span class="${urgencyClass}" style="font-size:12px;">${urgencyText}</span>
+                </div>
+                <div style="font-size:13px; color:var(--text-secondary);">
+                    <span>${dateStr}</span>
+                </div>
+            </div>
+        `;
+        upcomingList.appendChild(li);
+    });
 }
 
 async function checkLiveReminders() {
@@ -485,7 +565,6 @@ document.getElementById('schedule-form')?.addEventListener('submit', async (e) =
     }
     syncScheduleTypeUI();
     await refreshSchedules();
-    await refreshOverdue();
 });
 
 function cancelEdit() {
@@ -546,7 +625,6 @@ scheduleList?.addEventListener('click', async (e) => {
         }
 
         await refreshSchedules();
-        await refreshOverdue();
         return;
     }
 
@@ -634,7 +712,6 @@ scheduleList?.addEventListener('change', async (e) => {
 
     setTimeout(async () => {
         await refreshSchedules();
-        await refreshOverdue();
     }, 300);
 });
 
@@ -706,9 +783,8 @@ repeatTypeEl?.addEventListener('change', syncRepeatUI);
     syncScheduleTypeUI();
     syncRepeatUI();
     await refreshSchedules();
-    await refreshOverdue();
     await checkLiveReminders();
     updateCountdowns();
     setInterval(checkLiveReminders, 30000);
-    setInterval(updateCountdowns, 60000); // Update countdown every minute
+    setInterval(updateCountdowns, 60000); // 
 })();

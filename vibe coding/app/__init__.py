@@ -5,6 +5,29 @@ from config import Config
 from app.models import db
 
 
+def ensure_user_schema() -> None:
+    from app.models import db, User, Schedule
+    from werkzeug.security import generate_password_hash
+
+    inspector = inspect(db.engine)
+    if not inspector.has_table("schedules") or not inspector.has_table("users"):
+        return
+
+    existing_users = {row.username for row in db.session.query(User.username).all()}
+    schedule_users = {row.username for row in db.session.query(Schedule.username).distinct().all()}
+    
+    missing_usernames = schedule_users - existing_users
+    
+    if missing_usernames:
+        default_hash = generate_password_hash("123456")
+        for uname in missing_usernames:
+            db.session.execute(
+                text("INSERT INTO users (username, password_hash, created_at) VALUES (:u, :p, CURRENT_TIMESTAMP)"),
+                {"u": uname, "p": default_hash}
+            )
+        db.session.commit()
+
+
 def ensure_schedule_schema() -> None:
     inspector = inspect(db.engine)
     if not inspector.has_table("schedules"):
@@ -79,6 +102,7 @@ def create_app(test_config: dict | None = None) -> Flask:
 
     with app.app_context():
         db.create_all()
+        ensure_user_schema()
         ensure_schedule_schema()
 
     return app

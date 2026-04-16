@@ -283,8 +283,50 @@ def login_page():
 def login():
     data = request.get_json(silent=True) or {}
     username = (data.get("username") or "").strip()
+    password = (data.get("password") or "").strip()
+
     if not username:
-        return jsonify({"error": "username is required"}), 400
+        return jsonify({"error": "请输入用户名"}), 400
+    if not password:
+        return jsonify({"error": "请输入密码"}), 400
+
+    from app.models import User, db
+    
+    user = User.query.filter_by(username=username).first()
+    if not user or not user.check_password(password):
+        return jsonify({"error": "用户名或密码错误"}), 401
+
+    session["username"] = username
+    return jsonify({"message": "ok"})
+
+
+@bp.get("/register")
+def register_page():
+    return render_template("register.html")
+
+
+@bp.post("/register")
+def register():
+    data = request.get_json(silent=True) or {}
+    username = (data.get("username") or "").strip()
+    password = (data.get("password") or "").strip()
+
+    if not username:
+        return jsonify({"error": "请输入用户名"}), 400
+    if not password:
+        return jsonify({"error": "请输入密码"}), 400
+
+    from app.models import User, db
+    
+    if User.query.filter_by(username=username).first():
+        return jsonify({"error": "该用户名已被注册"}), 409
+
+    user = User(username=username)
+    user.set_password(password)
+    db.session.add(user)
+    db.session.commit()
+
+    # 注册后自动登录
     session["username"] = username
     return jsonify({"message": "ok"})
 

@@ -106,9 +106,9 @@
                 <div id="calendar" class="calendar-wrap"></div>
             </section>
 
-            <section class="card" id="section-overdue">
-                <h2>过期提醒（登录可见）</h2>
-                <ul id="overdue-list" class="list"></ul>
+            <section class="card" id="section-upcoming">
+                <h2>近期日程</h2>
+                <ul id="upcoming-list" class="list"></ul>
             </section>
 
         </div><!-- col-right end -->
@@ -121,6 +121,27 @@
         <h2 id="reminder-title">日程到时提醒</h2>
         <p id="reminder-message" class="reminder-message">你有待确认的日程提醒。</p>
         <button id="reminder-confirm-btn" class="btn btn-alert" type="button">我已确认</button>
+    </div>
+</div>
+
+<div id="event-detail-overlay" class="reminder-overlay hidden" role="dialog" aria-modal="true"
+    aria-labelledby="event-detail-title">
+    <div class="reminder-modal" style="text-align: left;">
+        <h2 id="event-detail-title" style="margin-bottom: 24px; color: var(--primary);">日程详情</h2>
+
+        <div style="margin-bottom: 12px;">
+            <strong style="color: var(--text-secondary);">时间：</strong>
+            <span id="event-detail-time" style="color: var(--text-primary);"></span>
+        </div>
+
+        <div style="margin-bottom: 24px;">
+            <strong style="color: var(--text-secondary);">地点/备注：</strong>
+            <span id="event-detail-desc" style="color: var(--text-primary);"></span>
+        </div>
+
+        <div style="text-align: right;">
+            <button id="event-detail-close-btn" class="btn btn-ghost" type="button">关闭</button>
+        </div>
     </div>
 </div>
 
